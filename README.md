@@ -31,11 +31,11 @@ kind Kubernetes Cluster (1 control-plane + 2 workers)
 | Tool | Version | Install |
 |------|---------|---------|
 | Docker Desktop | Latest | https://www.docker.com/products/docker-desktop |
-| kind | Latest | Bundled with Docker Desktop |
-| Pulumi CLI | v3.x+ | `brew install pulumi` |
-| Node.js + npm | v18.x+ | Via conda (see Step 3) |
-| kubectl | v1.28+ | `brew install kubectl` |
-| Conda | Latest | https://docs.conda.io/en/latest/miniconda.html |
+| kind | Latest | https://kind.sigs.k8s.io/docs/user/quick-start/#installation |
+| Pulumi CLI | v3.x+ | https://www.pulumi.com/docs/install/ |
+| Node.js + npm | v18.x+ | https://nodejs.org/en/download or via conda |
+| kubectl | v1.28+ | https://kubernetes.io/docs/tasks/tools/ |
+| Conda (optional) | Latest | https://docs.conda.io/en/latest/miniconda.html |
 
 ### Docker Desktop Resources
 Before starting, make sure Docker Desktop has enough resources:
@@ -46,14 +46,14 @@ Before starting, make sure Docker Desktop has enough resources:
 
 ## Step-by-Step Deploy Instructions
 
-### Step 1 — Clone the repository
+### Step 1 - Clone the repository
 
 ```bash
 git clone https://github.com/yashshrivastav22/k8s-guestbook-monitoring.git
 cd k8s-guestbook-monitoring
 ```
 
-### Step 2 — Create kind cluster (1 master + 2 workers)
+### Step 2 - Create kind cluster (1 master + 2 workers)
 
 Create the cluster config file:
 ```bash
@@ -92,7 +92,7 @@ kubectl config current-context
 # Should print: kind-guestbook
 ```
 
-### Step 3 — Set up conda virtual environment
+### Step 3 - Set up conda virtual environment
 
 ```bash
 # Create conda environment with Node.js
@@ -108,30 +108,19 @@ npm --version
 
 > **Note:** Pulumi CLI is installed globally on your Mac, not inside conda.
 
-### Step 4 — Install Node dependencies
+### Step 4 - Install Node dependencies
 
 ```bash
 npm install
 ```
 
-Expected output:
-```
-added 234 packages, and audited 235 packages
-found 0 vulnerabilities
-```
-
-### Step 5 — Login to Pulumi (local, no account needed)
+### Step 5 - Login to Pulumi (local, no account needed)
 
 ```bash
 pulumi login --local
 ```
 
-Expected output:
-```
-Logged in to Mac.lan as <yourname> (file://~)
-```
-
-### Step 6 — Initialize Pulumi stack
+### Step 6 - Initialize Pulumi stack
 
 ```bash
 pulumi stack init dev
@@ -150,7 +139,7 @@ NAME  LAST UPDATE  RESOURCE COUNT
 dev*  n/a          0
 ```
 
-### Step 7 — Verify Pulumi.dev.yaml has correct context
+### Step 7 - Verify Pulumi.dev.yaml has correct context
 
 ```bash
 cat Pulumi.dev.yaml
@@ -169,15 +158,15 @@ nano Pulumi.dev.yaml
 # Save: Ctrl+X → Y → Enter
 ```
 
-### Step 8 — Set Grafana admin password
+### Step 8 - Set Grafana admin password
 
 ```bash
 pulumi config set --secret grafanaAdminPassword 'Admin@123!'
 ```
 
-> **Note:** You will be asked for your passphrase from Step 6. You can use any password you like — just remember it for Grafana login.
+> **Note:** You will be asked for your passphrase from Step 6. You can use any password you like just remember it for Grafana login.
 
-### Step 9 — Deploy everything
+### Step 9 - Deploy everything
 
 ```bash
 pulumi up
@@ -187,11 +176,11 @@ pulumi up
 - Review the preview of resources
 - Type **yes** to deploy
 
-> ⏱ First deploy takes **5-10 minutes** — it downloads Helm charts and container images. This is normal.
+> ⏱ First deploy takes **5-10 minutes** - it downloads Helm charts and container images. This is normal.
 
 > ⚠️ **If `pulumi up` fails on first run** with a CRD error, just run `pulumi up` again. This is a known timing issue with CRD installation that resolves on the second run.
 
-### Step 10 — Verify deployment
+### Step 10 - Verify deployment
 
 ```bash
 # Check all pods are running
@@ -232,19 +221,19 @@ prometheus-prometheus-node-exporter-xxxxx              1/1     Running
 
 Open **three terminal tabs** and run one command in each:
 
-### Terminal 1 — Guestbook App
+### Terminal 1 - Guestbook App
 ```bash
 kubectl port-forward -n guestbook svc/frontend 8080:80
 ```
 Open: **http://localhost:8080**
 
-### Terminal 2 — Grafana
+### Terminal 2 - Grafana
 ```bash
 kubectl port-forward -n monitoring svc/grafana 3000:80
 ```
 Open: **http://localhost:3000**
 
-### Terminal 3 — Prometheus
+### Terminal 3 - Prometheus
 ```bash
 kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090
 ```
@@ -294,7 +283,7 @@ verifyScrapingCommand    kubectl port-forward -n monitoring svc/prometheus-kube-
 
 ## How to Verify Guestbook Metrics are Being Scraped
 
-### Method 1 — Prometheus Targets UI
+### Method 1 - Prometheus Targets UI
 
 Open **http://localhost:9090/targets**
 
@@ -303,9 +292,9 @@ Look for `kubernetes-pods (3/3 up)`:
 - redis-follower :9121 → **UP** ✅
 - redis-follower :9121 → **UP** ✅
 
-> **Note:** `kube-controller-manager`, `kube-etcd`, `kube-proxy`, `kube-scheduler` show **DOWN** on kind clusters. This is **completely normal** — kind doesn't expose these internal ports. Only our guestbook Redis metrics matter and they are all UP.
+> **Note:** `kube-controller-manager`, `kube-etcd`, `kube-proxy`, `kube-scheduler` show **DOWN** on kind clusters. This is **completely normal** - kind doesn't expose these internal ports. Only our guestbook Redis metrics matter and they are all UP.
 
-### Method 2 — Query metrics in Prometheus
+### Method 2 - Query metrics in Prometheus
 
 Open **http://localhost:9090** → Graph tab and run:
 
@@ -323,7 +312,7 @@ sum by(pod) (rate(container_cpu_usage_seconds_total{namespace="guestbook", conta
 sum by(pod) (container_memory_working_set_bytes{namespace="guestbook", container="php-redis"})
 ```
 
-### Method 3 — Check raw Redis metrics endpoint
+### Method 3 - Check raw Redis metrics endpoint
 
 ```bash
 kubectl port-forward -n guestbook \
@@ -337,7 +326,7 @@ curl http://localhost:9121/metrics | grep redis_commands_processed
 
 ---
 
-## Grafana Dashboard — "Guestbook Application"
+## Grafana Dashboard - "Guestbook Application"
 
 Navigate to: **Dashboards → Browse → Guestbook Application**
 
@@ -370,7 +359,7 @@ Navigate to: **Dashboards → Browse → Guestbook Application**
 
 ---
 
-## MetalLB — LoadBalancer for kind
+## MetalLB - LoadBalancer for kind
 
 Since kind doesn't support cloud LoadBalancers natively, we deploy **MetalLB** to assign real IPs from Docker's internal network:
 
@@ -420,6 +409,6 @@ kind delete cluster --name guestbook
 | Grafana as separate Helm release | Independent upgrades; cleaner datasource/dashboard config |
 | redis-exporter sidecar | Co-locates exporter with Redis; no separate DaemonSet needed |
 | ServiceMonitor CRs | More robust than annotation-based scraping for Redis |
-| Dashboard as ConfigMap | Grafana sidecar hot-loads dashboards — no manual import needed |
+| Dashboard as ConfigMap | Grafana sidecar hot-loads dashboards - no manual import needed |
 | Conda virtual env | Isolates Node.js/npm from system Python environment |
-| Pulumi local backend | No Pulumi account needed — state stored locally |
+| Pulumi local backend | No Pulumi account needed - state stored locally |
