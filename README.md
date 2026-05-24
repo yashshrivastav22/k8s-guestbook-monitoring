@@ -106,7 +106,7 @@ node --version   # v18.x or higher
 npm --version
 ```
 
-> **Note:** Pulumi CLI is installed globally on your Mac, not inside conda.
+> **Note:** Pulumi CLI is installed globally on your system, not inside conda.
 
 ### Step 4 - Install Node dependencies
 
@@ -368,7 +368,7 @@ Since kind doesn't support cloud LoadBalancers natively, we deploy **MetalLB** t
 | frontend (guestbook) | 172.18.255.200 |
 | grafana (monitoring) | 172.18.255.201 |
 
-> **Note:** These IPs are inside Docker's network and are not reachable directly from your Mac browser. Use `kubectl port-forward` to access the applications.
+> **Note:** These IPs are inside Docker's network and are not reachable directly from your system browser. Use `kubectl port-forward` to access the applications.
 
 ---
 
