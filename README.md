@@ -153,7 +153,7 @@ config:
 
 If the context is different, update it:
 ```bash
-nano Pulumi.dev.yaml
+vim Pulumi.dev.yaml
 # Change kubernetes:context to: kind-guestbook
 # Save: Ctrl+X → Y → Enter
 ```
@@ -238,6 +238,19 @@ Open: **http://localhost:3000**
 kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090
 ```
 Open: **http://localhost:9090**
+
+---
+
+## Application Preview
+
+### Guestbook Application
+![Guestbook App](screenshots/guestbook-app.png)
+
+### Grafana Dashboard — Guestbook Metrics
+![Grafana Dashboard](screenshots/grafana-dashboard.png)
+
+### Prometheus Targets — Metrics Scraping
+![Prometheus Targets](screenshots/prometheus-targets.png)
 
 ---
 
