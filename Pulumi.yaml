@@ -1,0 +1,5 @@
+name: k8s-guestbook-monitoring
+runtime: nodejs
+description: >
+  Kubernetes Guestbook application extended with Prometheus and Grafana monitoring.
+  Deployed using Pulumi Infrastructure as Code (TypeScript).
