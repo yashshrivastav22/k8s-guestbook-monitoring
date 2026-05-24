@@ -1,5 +1,2 @@
-encryptionsalt: v1:o4FjI0xn+IU=:v1:ame1cwegtpruYTzp:p5ZSA0n1eL65Rdu7YxW9DAaFcuEUmQ==
 config:
   kubernetes:context: kind-guestbook
-  k8s-guestbook-monitoring:grafanaAdminPassword:
-    secure: v1:UKO+k8bK9X16r8fv:EkdGzBqi7CKUCy+U99BpbIAU/vKbpi3MORsD

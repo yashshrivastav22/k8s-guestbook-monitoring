@@ -5,3 +5,4 @@ bin/
 *.d.ts
 *.js.map
 package-lock.json
+.DS_Store
