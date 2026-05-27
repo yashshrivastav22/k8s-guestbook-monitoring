@@ -246,10 +246,10 @@ Open: **http://localhost:9090**
 ### Guestbook Application
 ![Guestbook App](screenshots/guestbook-app.png)
 
-### Grafana Dashboard — Guestbook Metrics
+### Grafana Dashboard - Guestbook Metrics
 ![Grafana Dashboard](screenshots/grafana-dashboard.png)
 
-### Prometheus Targets — Metrics Scraping
+### Prometheus Targets - Metrics Scraping
 ![Prometheus Targets](screenshots/prometheus-targets.png)
 
 ---
